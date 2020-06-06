@@ -1,29 +1,21 @@
-# README #
+This is the ToolchainGenericDS-argvtest project:
 
-This README would normally document whatever steps are necessary to get your application up and running.
+1.	Compile Toolchain:
+To compile this project you will need to follow the steps at https://bitbucket.org/Coto88/toolchaingenericds :
+Then simply extract the project somewhere.
 
-### What is this repository for? ###
+2.	Compile this project: 
+Open msys, through msys commands head to the directory your extracted this project.
+Then write:
+make clean <enter>
+make <enter>
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+After compiling, run the example in NDS. 
 
-### How do I get set up? ###
+Project Specific description:
+Reads arguments (libnds ARGV format) if any, received from former loader. 
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Button (Start): Shutdown NDS
 
-### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+Coto

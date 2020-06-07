@@ -111,8 +111,7 @@ int main(int argc, char argv[argvItems][MAX_TGDSFILENAME_LENGTH]) {
 	{
 		scanKeys();
 		if (keysPressed() & KEY_START){
-			
-			menuShow();
+			shutdownNDSHardware();
 			while(keysPressed() & KEY_START){
 				scanKeys();
 			}

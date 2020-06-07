@@ -16,6 +16,8 @@ Project Specific description:
 Reads arguments (libnds ARGV format) if any, received from former loader. 
 
 Button (Start): Shutdown NDS
+Button (Select): GDBGDB Debugging
+
 
 
 Coto

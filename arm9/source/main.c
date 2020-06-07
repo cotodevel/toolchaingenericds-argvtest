@@ -48,7 +48,7 @@ static inline void menuShow(){
 	printarm7DebugBuffer();
 }
 
-int main(int _argc, sint8 **_argv) {
+int main(int argc, char argv[10][256]) {
 	
 	/*			TGDS 1.5 Standard ARM9 Init code start	*/
 	bool isTGDSCustomConsole = false;	//set default console or custom console: default console
@@ -77,10 +77,35 @@ int main(int _argc, sint8 **_argv) {
 	flush_dcache_all();
 	/*			TGDS 1.5 Standard ARM9 Init code end	*/
 	
+	/*
+	printf("argc addr: %x", &__system_argv->argc);
+	printf("argv addr: %x", &__system_argv->argv);
+	
+	
+	*/
+	
+	
+	
 	//Show logo
 	RenderTGDSLogoMainEngine((uint8*)&TGDSLogoLZSSCompressed[0], TGDSLogoLZSSCompressed_size);
 	
 	menuShow();
+	
+	printf("argc: %x", argc);
+	printf("argv: %x", argv);
+	
+	//ARGV Test
+	if (0 != argc ) {
+		int i;
+		for (i=0; i<argc; i++) {
+			if (argv[i]) {
+				printf("[%d] %s ", i, argv[i]);
+			}
+		}
+		
+	} else {
+		printf("No arguments passed!");
+	}
 	
 	static bool GDBEnabled = false;
 	while(1) 

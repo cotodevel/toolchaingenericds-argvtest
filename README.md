@@ -14,10 +14,23 @@ After compiling, run the example in NDS.
 
 Project Specific description:
 Reads arguments (libnds ARGV format) if any, received from former loader. 
-
 Button (Start): Shutdown NDS
 Button (Select): GDBGDB Debugging
 
+Usage:
+	//Send TGDS/libnds ARGuments 
+	char thisArgv[3][MAX_TGDSFILENAME_LENGTH];
+	memset(thisArgv, 0, sizeof(thisArgv));
+	strcpy(&thisArgv[0][0], "ToolchainGenericDS-multiboot.nds");				//Arg0:	Loader used
+	strcpy(&thisArgv[1][0], "0:/directory/filename.txt");						//Arg1: NDS Binary loaded
+	addARGV(2, (char*)&thisArgv);
+	
+	//Receive TGDS/libnds ARGuments:
+	See main.c
 
+
+Note:
+Libnds compatibility is kept. The only thing required, is, if you send a single ARGV in the slot 1 (see above), you need to fill ARGV in slot0 as well. Otherwise ARGV won't be sent.
+In libnds, this doesn't happen. But hey, we've got these awesome binaries supported anyway. ;-)
 
 Coto

@@ -34,6 +34,8 @@ USA
 #include "consoleTGDS.h"
 #include "soundTGDS.h"
 #include "nds_cp15_misc.h"
+#include "fatfslayerTGDS.h"
+#include "utilsTGDS.h"
 
 char curChosenBrowseFile[MAX_TGDSFILENAME_LENGTH+1];
 
@@ -48,7 +50,7 @@ static inline void menuShow(){
 	printarm7DebugBuffer();
 }
 
-int main(int argc, char argv[10][256]) {
+int main(int argc, char argv[argvItems][MAX_TGDSFILENAME_LENGTH]) {
 	
 	/*			TGDS 1.5 Standard ARM9 Init code start	*/
 	bool isTGDSCustomConsole = false;	//set default console or custom console: default console
@@ -77,24 +79,12 @@ int main(int argc, char argv[10][256]) {
 	flush_dcache_all();
 	/*			TGDS 1.5 Standard ARM9 Init code end	*/
 	
-	/*
-	printf("argc addr: %x", &__system_argv->argc);
-	printf("argv addr: %x", &__system_argv->argv);
-	
-	
-	*/
-	
-	
-	
 	//Show logo
 	RenderTGDSLogoMainEngine((uint8*)&TGDSLogoLZSSCompressed[0], TGDSLogoLZSSCompressed_size);
 	
 	menuShow();
 	
-	printf("argc: %x", argc);
-	printf("argv: %x", argv);
-	
-	//ARGV Test
+	//ARGV Implementation test
 	if (0 != argc ) {
 		int i;
 		for (i=0; i<argc; i++) {
@@ -106,6 +96,15 @@ int main(int argc, char argv[10][256]) {
 	} else {
 		printf("No arguments passed!");
 	}
+	
+	//Send TGDS/libnds ARGuments Implementation: https://bitbucket.org/Coto88/toolchaingenericds-multiboot
+	/*
+	char thisArgv[3][MAX_TGDSFILENAME_LENGTH];
+	memset(thisArgv, 0, sizeof(thisArgv));
+	strcpy(&thisArgv[0][0], "ToolchainGenericDS-multiboot.nds");	//Arg0:	Loader used
+	strcpy(&thisArgv[1][0], filename);								//Arg1: NDS Binary loaded
+	addARGV(2, (char*)&thisArgv);
+	*/
 	
 	static bool GDBEnabled = false;
 	while(1) 

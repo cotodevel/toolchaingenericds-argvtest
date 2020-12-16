@@ -169,7 +169,7 @@ int main(int argc, char argv[argvItems][MAX_TGDSFILENAME_LENGTH]) {
 					if (keys&KEY_B){
 						break;
 					}
-					IRQVBlankWait();
+					IRQWait(IRQ_HBLANK);
 				}
 				
 				if (keys&KEY_B){
@@ -193,7 +193,7 @@ int main(int argc, char argv[argvItems][MAX_TGDSFILENAME_LENGTH]) {
 		//GDB Debug End
 		
 		handleARM9SVC();	/* Do not remove, handles TGDS services */
-		IRQVBlankWait();
+		IRQWait(IRQ_HBLANK);
 	}
 
 	return 0;

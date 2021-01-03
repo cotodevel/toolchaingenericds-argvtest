@@ -109,14 +109,14 @@ int main(int argc, char argv[argvItems][MAX_TGDSFILENAME_LENGTH]) {
 	while(1) 
 	{
 		scanKeys();
-		if (keysPressed() & KEY_START){
+		if (keysDown() & KEY_START){
 			shutdownNDSHardware();
-			while(keysPressed() & KEY_START){
+			while(keysDown() & KEY_START){
 				scanKeys();
 			}
 		}
 		
-		if (keysPressed() & KEY_SELECT){
+		if (keysDown() & KEY_SELECT){
 			
 			if(GDBEnabled == false){
 				GDBEnabled = true;
@@ -125,7 +125,7 @@ int main(int argc, char argv[argvItems][MAX_TGDSFILENAME_LENGTH]) {
 				GDBEnabled = false;
 			}
 			
-			while(keysPressed() & KEY_SELECT){
+			while(keysDown() & KEY_SELECT){
 				scanKeys();
 			}
 		}
@@ -162,7 +162,7 @@ int main(int argc, char argv[argvItems][MAX_TGDSFILENAME_LENGTH]) {
 				int keys = 0;
 				while(1){
 					scanKeys();
-					keys = keysPressed();
+					keys = keysDown();
 					if (keys&KEY_A){
 						break;
 					}

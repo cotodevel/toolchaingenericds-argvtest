@@ -181,7 +181,7 @@ int main(int argc, char **argv) {
 				}
 				
 				if (keys&KEY_B){
-					main(0, (sint8**)"");
+					main(argc, argv);
 				}
 				
 				if (switch_dswnifi_mode(dswifi_gdbstubmode) == true){ // gdbNdsStart() called

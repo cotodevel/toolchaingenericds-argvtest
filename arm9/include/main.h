@@ -34,7 +34,7 @@ USA
 extern "C" {
 #endif
 
-extern int main(int argc, char ** argv);
+extern int main(int argc, char **argv);
 extern char curChosenBrowseFile[MAX_TGDSFILENAME_LENGTH+1];
 
 #ifdef __cplusplus

@@ -21,7 +21,7 @@ USA
 #include "biosTGDS.h"
 #include "spifwTGDS.h"
 #include "posixHandleTGDS.h"
-
+#include "wifi_arm7.h"
 
 //---------------------------------------------------------------------------------
 int main(int _argc, sint8 **_argv) {

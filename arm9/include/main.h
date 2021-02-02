@@ -23,8 +23,8 @@ USA
 
 #include "typedefsTGDS.h"
 #include "dsregs.h"
-#include "limitsTGDS.h"
 #include "fatfslayerTGDS.h"
+#include "utilsTGDS.h"
 #include "utilsTGDS.h"
 
 #endif
@@ -35,7 +35,14 @@ extern "C" {
 #endif
 
 extern int main(int argc, char **argv);
-extern char curChosenBrowseFile[MAX_TGDSFILENAME_LENGTH+1];
+extern void ApplicationMainLoop();
+
+//TGDS Soundstreaming API
+extern int internalCodecType;
+extern struct fd * _FileHandleVideo; 
+extern struct fd * _FileHandleAudio;
+extern bool stopSoundStreamUser();
+extern void closeSoundUser();
 
 #ifdef __cplusplus
 }

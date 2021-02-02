@@ -1,6 +1,7 @@
 ![ToolchainGenericDS](img/TGDS-Logo.png)
 
-This is the ToolchainGenericDS-argvtest project:
+
+This is the ToolchainGenericDS Woopsi argvtest project:
 
 1.	Compile Toolchain:
 To compile this project you will need to follow the steps at https://bitbucket.org/Coto88/toolchaingenericds :
@@ -15,6 +16,10 @@ make <enter>
 After compiling, run the example in NDS. 
 
 Project Specific description:
+A Woopsi UI + TGDS SDK template for UI control handling on the NintendoDS. 
+Draw the pop up windows across the screen or scroll other windows to test touchscreen. 
+Also plays WAV/AD-PCM (Intel) files from the directory!
+
 Reads arguments (libnds ARGV format) if any, received from former loader. 
 Button (Start): Shutdown NDS
 Button (Select): GDBGDB Debugging
@@ -34,5 +39,8 @@ Usage:
 Note:
 Libnds compatibility is kept. The only thing required, is, if you send a single ARGV in the slot 1 (see above), you need to fill ARGV in slot0 as well. Otherwise ARGV won't be sent.
 In libnds, this doesn't happen. But hey, we've got these awesome binaries supported anyway. ;-)
+
+
+Note: UI Controls experimental.
 
 Coto

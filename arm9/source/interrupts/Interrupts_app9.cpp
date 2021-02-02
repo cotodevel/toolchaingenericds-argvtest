@@ -24,12 +24,10 @@ USA
 #include "dsregs_asm.h"
 #include "main.h"
 #include "keypadTGDS.h"
-#include "interrupts.h"
-#include "dswnifi_lib.h"
-#include "utilsTGDS.h"
-#include "spifwTGDS.h"
 
 //User Handler Definitions
+#include "woopsifuncs.h"
+#include "WoopsiTemplate.h"
 
 #ifdef ARM9
 __attribute__((section(".itcm")))
@@ -38,7 +36,6 @@ void IpcSynchandlerUser(uint8 ipcByte){
 	switch(ipcByte){
 		default:{
 			//ipcByte should be the byte you sent from external ARM Core through sendByteIPC(ipcByte);
-			printf("ARM7:IPC_SYNC_IRQ_REQUEST");
 		}
 		break;
 	}
@@ -83,28 +80,26 @@ void HblankUser(){
 __attribute__((section(".itcm")))
 #endif
 void VblankUser(){
-	struct sIPCSharedTGDSSpecific* TGDSUSERIPC = getsIPCSharedTGDSSpecific();
-	if(TGDSUSERIPC->frameCounter9 < 60){
-		TGDSUSERIPC->frameCounter9++;
-	}
-	else{
-		TGDSUSERIPC->frameCounter9 = 0;
-	}
+	woopsiVblFunc();
+	
+	//Timing reserved for 2D/3D rendering
 }
 
 #ifdef ARM9
 __attribute__((section(".itcm")))
 #endif
 void VcounterUser(){
+	
 }
-
 
 //Note: this event is hardware triggered from ARM7, on ARM9 a signal is raised through the FIFO hardware
 #ifdef ARM9
 __attribute__((section(".itcm")))
 #endif
 void screenLidHasOpenedhandlerUser(){
-	
+	if(WoopsiTemplateProc != NULL){
+		WoopsiTemplateProc->handleLidOpen();
+	}
 }
 
 //Note: this event is hardware triggered from ARM7, on ARM9 a signal is raised through the FIFO hardware
@@ -112,5 +107,7 @@ void screenLidHasOpenedhandlerUser(){
 __attribute__((section(".itcm")))
 #endif
 void screenLidHasClosedhandlerUser(){
-	
+	if(WoopsiTemplateProc != NULL){
+		WoopsiTemplateProc->handleLidClosed();
+	}
 }

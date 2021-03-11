@@ -80,6 +80,12 @@ static inline void menuShow(){
 	printarm7DebugBuffer();
 }
 
+//ToolchainGenericDS-LinkedModule User implementation: Called if TGDS-LinkedModule fails to reload ARM9.bin from DLDI.
+char args[8][MAX_TGDSFILENAME_LENGTH];
+char *argvs[8];
+int TGDSProjectReturnFromLinkedModule() __attribute__ ((optnone)) {
+	return -1;
+}
 int main(int argc, char **argv) {
 	
 	/*			TGDS 1.6 Standard ARM9 Init code start	*/

@@ -1,5 +1,8 @@
 ![ToolchainGenericDS](img/TGDS-Logo.png)
 
+NTR/TWL SDK: TGDS1.64
+
+master: Development branch. Use TGDS1.64Stable: branch for stable features.
 
 This is the ToolchainGenericDS Woopsi argvtest project:
 
@@ -35,6 +38,10 @@ Usage:
 	//Receive TGDS/libnds ARGuments:
 	See main.c
 
+/release folder has the latest binary precompiled for your convenience.
+
+Latest stable release:
+https://bitbucket.org/Coto88/ToolchainGenericDS-argvtest/get/TGDS1.64Stable.zip
 
 Note:
 Libnds compatibility is kept. The only thing required, is, if you send a single ARGV in the slot 1 (see above), you need to fill ARGV in slot0 as well. Otherwise ARGV won't be sent.

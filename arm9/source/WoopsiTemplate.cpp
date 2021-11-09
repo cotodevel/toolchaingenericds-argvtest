@@ -94,13 +94,18 @@ void WoopsiTemplate::startup(int argc, char **argv) {
 	newScreen->addGadget(_MultiLineTextBoxLogger);
 	_MultiLineTextBoxLogger->removeText(0);
 	_MultiLineTextBoxLogger->moveCursorToPosition(0);
-	_MultiLineTextBoxLogger->appendText("[ToolchainGenericDS-argvtest] \nArguments received: \n");
+	
+	char arrBuild[256+1];
+	sprintf(arrBuild, "[ToolchainGenericDS-argvtest] \nArguments received: [%d] \n", argc);
+	_MultiLineTextBoxLogger->appendText(WoopsiString(arrBuild));
+
+	_MultiLineTextBoxLogger->appendText("");
+	
 	//ARGV Implementation test
 	if (0 != argc ) {
 		int i;
 		for (i=0; i<argc; i++) {
 			if (argv[i]) {
-				char arrBuild[256+1];
 				sprintf(arrBuild, "[%d] %s \n", i, argv[i]);
 				_MultiLineTextBoxLogger->appendText(WoopsiString(arrBuild));
 			}

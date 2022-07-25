@@ -90,7 +90,7 @@ void WoopsiTemplate::startup(int argc, char **argv) {
 	
 	//Destroyable Textbox implementation init
 	newScreen->getClientRect(rect);
-	_MultiLineTextBoxLogger = new MultiLineTextBox(rect.x, rect.y, 262, 170, "Loading\n...", Gadget::GADGET_DRAGGABLE, 5);
+	_MultiLineTextBoxLogger = new MultiLineTextBox(rect.x, rect.y, 262, 170, "Loading\n...", Gadget::GADGET_DRAGGABLE, 10);
 	newScreen->addGadget(_MultiLineTextBoxLogger);
 	_MultiLineTextBoxLogger->removeText(0);
 	_MultiLineTextBoxLogger->moveCursorToPosition(0);

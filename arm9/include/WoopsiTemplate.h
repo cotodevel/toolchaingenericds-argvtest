@@ -36,7 +36,7 @@ public:
 	Button* _nextFile;
 	Button* _play;
 	Button* _stop;
-	
+	Button* _RunToolchainGenericDSMB; //7
 private:
 	Alert* _alert;
 };

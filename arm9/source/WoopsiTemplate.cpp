@@ -18,6 +18,13 @@
 __attribute__((section(".dtcm")))
 WoopsiTemplate * WoopsiTemplateProc = NULL;
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void WoopsiTemplate::startup(int argc, char **argv) {
 	
 	Rect rect;
@@ -84,7 +91,18 @@ void WoopsiTemplate::startup(int argc, char **argv) {
 	_fileScreen->addGadget(_fileReq);
 	_fileReq->addGadgetEventHandler(this);
 	currentFileRequesterIndex = 0;
-	
+
+	//TGDS SDK Operation
+	{
+		AmigaWindow* _controlWindow2 = new AmigaWindow(0, 48, 256, 33, "SDK Operations", Gadget::GADGET_DRAGGABLE, AmigaWindow::AMIGA_WINDOW_SHOW_DEPTH);
+		newScreen->addGadget(_controlWindow2);
+		_controlWindow2->getClientRect(rect);
+
+		_RunToolchainGenericDSMB = new Button(rect.x, rect.y, 150, 16, "Run TGDS-Multiboot");
+		_RunToolchainGenericDSMB->setRefcon(7);
+		_controlWindow2->addGadget(_RunToolchainGenericDSMB);
+		_RunToolchainGenericDSMB->addGadgetEventHandler(this);
+	}
 	enableDrawing();	// Ensure Woopsi can now draw itself
 	redraw();			// Draw initial state
 	
@@ -121,10 +139,24 @@ void WoopsiTemplate::startup(int argc, char **argv) {
 	
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void WoopsiTemplate::shutdown() {
 	Woopsi::shutdown();
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void WoopsiTemplate::waitForAOrTouchScreenButtonMessage(MultiLineTextBox* thisLineTextBox, const WoopsiString& thisText){
 	thisLineTextBox->appendText(thisText);
 	scanKeys();
@@ -137,6 +169,13 @@ void WoopsiTemplate::waitForAOrTouchScreenButtonMessage(MultiLineTextBox* thisLi
 	}
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void WoopsiTemplate::handleValueChangeEvent(const GadgetEventArgs& e) {
 
 	// Did a gadget fire this event?
@@ -149,6 +188,13 @@ void WoopsiTemplate::handleValueChangeEvent(const GadgetEventArgs& e) {
 	}
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void WoopsiTemplate::handleLidClosed() {
 	// Lid has just been closed
 	_lidClosed = true;
@@ -161,6 +207,13 @@ void WoopsiTemplate::handleLidClosed() {
 	}
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void WoopsiTemplate::handleLidOpen() {
 	// Lid has just been opened
 	_lidClosed = false;
@@ -173,6 +226,13 @@ void WoopsiTemplate::handleLidOpen() {
 	}
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void WoopsiTemplate::handleClickEvent(const GadgetEventArgs& e) {
 	switch (e.getSource()->getRefcon()) {
 		//_Index Event
@@ -226,6 +286,38 @@ void WoopsiTemplate::handleClickEvent(const GadgetEventArgs& e) {
 			pendPlay = 2;
 		}	
 		break;
+		
+		//_RunToolchainGenericDSMB Event
+		case 7:{
+			//Default case use
+			char * TGDS_CHAINLOADEXEC = NULL;
+			char * TGDS_CHAINLOADTARGET = NULL;
+			char * TGDS_CHAINLOADCALLER = NULL;
+			if(__dsimode == true){
+				TGDS_CHAINLOADCALLER = "0:/ToolchainGenericDS-UnitTest.srl";
+				TGDS_CHAINLOADEXEC = "0:/ToolchainGenericDS-multiboot.srl";
+				TGDS_CHAINLOADTARGET = "0:/ToolchainGenericDS-multiboot.srl";
+			}
+			else{
+				TGDS_CHAINLOADCALLER = "0:/ToolchainGenericDS-UnitTest.nds";
+				TGDS_CHAINLOADEXEC = "0:/ToolchainGenericDS-multiboot.nds";
+				TGDS_CHAINLOADTARGET = "0:/ToolchainGenericDS-multiboot.nds";
+			}
+			//char thisArgv[4][MAX_TGDSFILENAME_LENGTH];
+			memset(thisArgv, 0, sizeof(thisArgv));
+			strcpy(&thisArgv[0][0], TGDS_CHAINLOADCALLER);	//Arg0:	This Binary loaded
+			strcpy(&thisArgv[1][0], TGDS_CHAINLOADEXEC);	//Arg1:	NDS Binary to chainload through TGDS-MB
+			strcpy(&thisArgv[2][0], TGDS_CHAINLOADTARGET);	//Arg2: NDS Binary loaded from TGDS-MB	
+			addARGV(3, (char*)&thisArgv);
+			strcpy(currentFileChosen, TGDS_CHAINLOADEXEC);
+			if(TGDSMultibootRunNDSPayload(currentFileChosen) == false){ //should never reach here, nor even return true. Should fail it returns false
+				//_MultiLineTextBoxLogger->appendText("Invalid NDS/TWL Binary");
+				//_MultiLineTextBoxLogger->appendText("or you are in NTR mode trying to load a TWL binary.");
+				//_MultiLineTextBoxLogger->appendText("or you are missing the TGDS-multiboot payload in root path.");
+				//_MultiLineTextBoxLogger->appendText("Press (A) to continue.");
+			}
+		}	
+		break;
 	}
 }
 
@@ -236,6 +328,13 @@ char currentFileChosen[256+1];
 
 //Called once Woopsi events are ended: TGDS Main Loop
 __attribute__((section(".itcm")))
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void Woopsi::ApplicationMainLoop(){
 	//Earlier.. main from Woopsi SDK.
 	

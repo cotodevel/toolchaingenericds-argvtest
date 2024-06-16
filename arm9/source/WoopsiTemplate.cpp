@@ -15,6 +15,7 @@
 #include "posixHandleTGDS.h"
 #include "keypadTGDS.h"
 #include "ipcfifoTGDSUser.h"
+#include "loader.h"
 
 __attribute__((section(".dtcm")))
 WoopsiTemplate * WoopsiTemplateProc = NULL;
@@ -291,25 +292,25 @@ void WoopsiTemplate::handleClickEvent(const GadgetEventArgs& e) {
 		//_RunToolchainGenericDSMB Event
 		case 7:{
 			//Default case use
-			char * TGDS_CHAINLOADEXEC = NULL;
-			char * TGDS_CHAINLOADTARGET = NULL;
 			char * TGDS_CHAINLOADCALLER = NULL;
+			char * TGDS_CHAINLOADEXEC = NULL;
 			if(__dsimode == true){
-				TGDS_CHAINLOADCALLER = "0:/ToolchainGenericDS-UnitTest.srl";
+				TGDS_CHAINLOADCALLER = "0:/ToolchainGenericDS-argvtest.srl";
 				TGDS_CHAINLOADEXEC = "0:/ToolchainGenericDS-multiboot.srl";
-				TGDS_CHAINLOADTARGET = "0:/ToolchainGenericDS-multiboot.srl";
 			}
 			else{
-				TGDS_CHAINLOADCALLER = "0:/ToolchainGenericDS-UnitTest.nds";
+				TGDS_CHAINLOADCALLER = "0:/ToolchainGenericDS-argvtest.nds";
 				TGDS_CHAINLOADEXEC = "0:/ToolchainGenericDS-multiboot.nds";
-				TGDS_CHAINLOADTARGET = "0:/ToolchainGenericDS-multiboot.nds";
 			}
-			//char thisArgv[4][MAX_TGDSFILENAME_LENGTH];
+			
+			//Arg0:	Chainload caller: TGDS-MB
+			//Arg1:	This NDS Binary reloaded through ChainLoad
+			//Arg2: This NDS Binary reloaded through ChainLoad's Argument0
+			char thisArgv[2][MAX_TGDSFILENAME_LENGTH];
 			memset(thisArgv, 0, sizeof(thisArgv));
-			strcpy(&thisArgv[0][0], TGDS_CHAINLOADCALLER);	//Arg0:	This Binary loaded
-			strcpy(&thisArgv[1][0], TGDS_CHAINLOADEXEC);	//Arg1:	NDS Binary to chainload through TGDS-MB
-			strcpy(&thisArgv[2][0], TGDS_CHAINLOADTARGET);	//Arg2: NDS Binary loaded from TGDS-MB	
-			addARGV(3, (char*)&thisArgv);
+			strcpy(&thisArgv[0][0], TGDS_CHAINLOADCALLER);	
+			strcpy(&thisArgv[1][0], TGDS_CHAINLOADEXEC);	
+			addARGV(2, (char*)&thisArgv);
 			strcpy(currentFileChosen, TGDS_CHAINLOADEXEC);
 			if(TGDSMultibootRunNDSPayload(currentFileChosen) == false){ //should never reach here, nor even return true. Should fail it returns false
 				//_MultiLineTextBoxLogger->appendText("Invalid NDS/TWL Binary");

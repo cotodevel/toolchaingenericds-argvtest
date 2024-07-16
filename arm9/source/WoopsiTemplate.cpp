@@ -100,7 +100,7 @@ void WoopsiTemplate::startup(int argc, char **argv) {
 		newScreen->addGadget(_controlWindow2);
 		_controlWindow2->getClientRect(rect);
 
-		_RunToolchainGenericDSMB = new Button(rect.x, rect.y, 150, 16, "Run TGDS-Multiboot");
+		_RunToolchainGenericDSMB = new Button(rect.x, rect.y, 150, 16, "Go back to Loader");
 		_RunToolchainGenericDSMB->setRefcon(7);
 		_controlWindow2->addGadget(_RunToolchainGenericDSMB);
 		_RunToolchainGenericDSMB->addGadgetEventHandler(this);
@@ -291,32 +291,11 @@ void WoopsiTemplate::handleClickEvent(const GadgetEventArgs& e) {
 		
 		//_RunToolchainGenericDSMB Event
 		case 7:{
-			//Default case use
-			char * TGDS_CHAINLOADCALLER = NULL;
-			char * TGDS_CHAINLOADEXEC = NULL;
-			if(__dsimode == true){
-				TGDS_CHAINLOADCALLER = "0:/ToolchainGenericDS-argvtest.srl";
-				TGDS_CHAINLOADEXEC = "0:/ToolchainGenericDS-multiboot.srl";
+			if(__dsimode == false){
+				shutdownNDSHardware();
 			}
 			else{
-				TGDS_CHAINLOADCALLER = "0:/ToolchainGenericDS-argvtest.nds";
-				TGDS_CHAINLOADEXEC = "0:/ToolchainGenericDS-multiboot.nds";
-			}
-			
-			//Arg0:	Chainload caller: TGDS-MB
-			//Arg1:	This NDS Binary reloaded through ChainLoad
-			//Arg2: This NDS Binary reloaded through ChainLoad's Argument0
-			char thisArgv[2][MAX_TGDSFILENAME_LENGTH];
-			memset(thisArgv, 0, sizeof(thisArgv));
-			strcpy(&thisArgv[0][0], TGDS_CHAINLOADCALLER);	
-			strcpy(&thisArgv[1][0], TGDS_CHAINLOADEXEC);	
-			addARGV(2, (char*)&thisArgv);
-			strcpy(currentFileChosen, TGDS_CHAINLOADEXEC);
-			if(TGDSMultibootRunNDSPayload(currentFileChosen) == false){ //should never reach here, nor even return true. Should fail it returns false
-				//_MultiLineTextBoxLogger->appendText("Invalid NDS/TWL Binary");
-				//_MultiLineTextBoxLogger->appendText("or you are in NTR mode trying to load a TWL binary.");
-				//_MultiLineTextBoxLogger->appendText("or you are missing the TGDS-multiboot payload in root path.");
-				//_MultiLineTextBoxLogger->appendText("Press (A) to continue.");
+				resetNDSHardware();
 			}
 		}	
 		break;

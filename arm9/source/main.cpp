@@ -116,8 +116,8 @@ int main(int argc, char **argv) {
 	GUI_init(isTGDSCustomConsole);
 	GUI_clear();
 
-	bool isCustomTGDSMalloc = true;
-	setTGDSMemoryAllocator(getProjectSpecificMemoryAllocatorSetup(isCustomTGDSMalloc));
+	bool isCustomTGDSMalloc = true; //Provides WoopsiSDK-TGDS Multiboot compatibility
+	setTGDSMemoryAllocator(getWoopsiSDKToolchainGenericDSMultibootMemoryAllocatorSetup(isCustomTGDSMalloc));
 	sint32 fwlanguage = (sint32)getLanguage();
 	
 	asm("mcr	p15, 0, r0, c7, c10, 4");

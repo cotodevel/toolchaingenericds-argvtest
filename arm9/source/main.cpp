@@ -116,8 +116,8 @@ int main(int argc, char **argv) {
 	GUI_init(isTGDSCustomConsole);
 	GUI_clear();
 
-	bool isCustomTGDSMalloc = true;
-	setTGDSMemoryAllocator(getProjectSpecificMemoryAllocatorSetup(isCustomTGDSMalloc));
+	bool isCustomTGDSMalloc = true; //Provides WoopsiSDK-TGDS Multiboot compatibility
+	setTGDSMemoryAllocator(getWoopsiSDKToolchainGenericDSMultibootMemoryAllocatorSetup(isCustomTGDSMalloc));
 	sint32 fwlanguage = (sint32)getLanguage();
 	
 	asm("mcr	p15, 0, r0, c7, c10, 4");
@@ -137,13 +137,14 @@ int main(int argc, char **argv) {
 	/*			TGDS 1.6 Standard ARM9 Init code end	*/
 	
 	REG_IME = 0;
-	set0xFFFF0000FastMPUSettings();
+	//set0xFFFF0000FastMPUSettings();
 	//TGDS-Projects -> legacy NTR TSC compatibility
 	if(__dsimode == true){
 		TWLSetTouchscreenTWLMode();
 	}
-	setupDisabledExceptionHandler();
 	REG_IME = 1;
+	
+	setupDisabledExceptionHandler();
 	
 	//ARGV Implementation test
 	if(getTGDSDebuggingState() == true){

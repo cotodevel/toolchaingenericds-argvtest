@@ -100,7 +100,12 @@ void WoopsiTemplate::startup(int argc, char **argv) {
 		newScreen->addGadget(_controlWindow2);
 		_controlWindow2->getClientRect(rect);
 
-		_RunToolchainGenericDSMB = new Button(rect.x, rect.y, 150, 16, "Go back to Loader");
+		if(__dsimode == true){
+			_RunToolchainGenericDSMB = new Button(rect.x, rect.y, 150, 16, "Go back to Loader");
+		}
+		else{
+			_RunToolchainGenericDSMB = new Button(rect.x, rect.y, 150, 16, "Turn off unit. ");
+		}
 		_RunToolchainGenericDSMB->setRefcon(7);
 		_controlWindow2->addGadget(_RunToolchainGenericDSMB);
 		_RunToolchainGenericDSMB->addGadgetEventHandler(this);

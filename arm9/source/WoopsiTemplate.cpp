@@ -189,8 +189,68 @@ void WoopsiTemplate::handleValueChangeEvent(const GadgetEventArgs& e) {
 	if (e.getSource() != NULL) {
 	
 		// Is the gadget the file requester?
-		if ((e.getSource()->getRefcon() == 1)  && (((FileRequester*)e.getSource())->getSelectedOption() != NULL)) {
+		if ((e.getSource()->getRefcon() == 1) && (((FileRequester*)e.getSource())->getSelectedOption() != NULL)) {
 			
+			//removed because filesystem access disabled
+			/*
+			//Play WAV/ADPCM if selected from the FileRequester
+			WoopsiString strObj = ((FileRequester*)e.getSource())->getSelectedOption()->getText();
+			memset(currentFileChosen, 0, sizeof(currentFileChosen));
+			strObj.copyToCharArray(currentFileChosen);
+			
+			//Boot .NDS file! (homebrew only)
+			char thisArgv[3][MAX_TGDSFILENAME_LENGTH];
+			memset(thisArgv, 0, sizeof(thisArgv));
+			strcpy(&thisArgv[0][0], "");	//Arg0:	This Binary loaded
+			strcpy(&thisArgv[1][0], "");	//Arg1:	NDS Binary reloaded
+			strcpy(&thisArgv[2][0], "");					//Arg2: NDS Binary ARG0		
+			u32 * payload = getTGDSMBV3ARM7Bootloader();
+			if(TGDSMultibootRunNDSPayload(currentFileChosen, (u8*)payload, 0, (char*)&thisArgv) == false){ //should never reach here, nor even return true. Should fail it returns false
+				Rect rect;
+				_fileScreen->getClientRect(rect);
+				_MultiLineTextBoxLogger = new MultiLineTextBox(rect.x, rect.y, 262, 170, "Loading\n...", Gadget::GADGET_DRAGGABLE, 5);
+				_fileScreen->addGadget(_MultiLineTextBoxLogger);
+				
+				_MultiLineTextBoxLogger->removeText(0);
+				_MultiLineTextBoxLogger->moveCursorToPosition(0);
+				_MultiLineTextBoxLogger->appendText("Failed booting NDS/TWL Binary \n ");
+				_MultiLineTextBoxLogger->appendText(currentFileChosen);
+				_MultiLineTextBoxLogger->appendText("\n");
+				waitForAOrTouchScreenButtonMessage(_MultiLineTextBoxLogger, "Press (A) or tap touchscreen to continue. \n");
+				_MultiLineTextBoxLogger->invalidateVisibleRectCache();
+				_fileScreen->eraseGadget(_MultiLineTextBoxLogger);
+				_MultiLineTextBoxLogger->destroy();
+			}
+			*/
+
+			/* 
+			//Destroyable Textbox implementation init
+			Rect rect;
+			_fileScreen->getClientRect(rect);
+			_MultiLineTextBoxLogger = new MultiLineTextBox(rect.x, rect.y, 262, 170, "Loading\n...", Gadget::GADGET_DRAGGABLE, 5);
+			_fileScreen->addGadget(_MultiLineTextBoxLogger);
+			
+			_MultiLineTextBoxLogger->removeText(0);
+			_MultiLineTextBoxLogger->moveCursorToPosition(0);
+			_MultiLineTextBoxLogger->appendText("File open OK: ");
+			_MultiLineTextBoxLogger->appendText(strObj);
+			_MultiLineTextBoxLogger->appendText("\n");
+			_MultiLineTextBoxLogger->appendText("Please wait calculating CRC32... \n");
+			
+			char arrBuild[256+1];
+			sprintf(arrBuild, "%s%x\n", "Invalid file: crc32 = 0x", crc32);
+			_MultiLineTextBoxLogger->appendText(WoopsiString(arrBuild));
+			
+			sprintf(arrBuild, "%s%x\n", "Expected: crc32 = 0x", 0x5F35977E);
+			_MultiLineTextBoxLogger->appendText(WoopsiString(arrBuild));
+			
+			waitForAOrTouchScreenButtonMessage(_MultiLineTextBoxLogger, "Press (A) or tap touchscreen to continue. \n");
+			
+			_MultiLineTextBoxLogger->invalidateVisibleRectCache();
+			_fileScreen->eraseGadget(_MultiLineTextBoxLogger);
+			_MultiLineTextBoxLogger->destroy();	//same as delete _MultiLineTextBoxLogger;
+			//Destroyable Textbox implementation end
+			*/
 		}
 	}
 }
@@ -296,6 +356,41 @@ void WoopsiTemplate::handleClickEvent(const GadgetEventArgs& e) {
 		
 		//_RunToolchainGenericDSMB Event
 		case 7:{
+
+			/*
+			char * TGDSMBv3Bootloader = NULL;
+			if(__dsimode == false){
+				TGDSMBv3Bootloader = "0:/ToolchainGenericDS-multiboot.nds";
+			}
+			else{
+				TGDSMBv3Bootloader = "0:/ToolchainGenericDS-multiboot.srl";
+			}
+
+			//Boot .NDS file! (homebrew only)
+			char thisArgv[3][MAX_TGDSFILENAME_LENGTH];
+			memset(thisArgv, 0, sizeof(thisArgv));
+			strcpy(&thisArgv[0][0], "");	//Arg0:	This Binary loaded
+			strcpy(&thisArgv[1][0], "");	//Arg1:	NDS Binary reloaded
+			strcpy(&thisArgv[2][0], "");					//Arg2: NDS Binary ARG0		
+			u32 * payload = getTGDSMBV3ARM7Bootloader();
+			if(TGDSMultibootRunNDSPayload(TGDSMBv3Bootloader, (u8*)payload, 0, (char*)&thisArgv) == false){ //should never reach here, nor even return true. Should fail it returns false
+				Rect rect;
+				_fileScreen->getClientRect(rect);
+				_MultiLineTextBoxLogger = new MultiLineTextBox(rect.x, rect.y, 262, 170, "Loading\n...", Gadget::GADGET_DRAGGABLE, 5);
+				_fileScreen->addGadget(_MultiLineTextBoxLogger);
+				
+				_MultiLineTextBoxLogger->removeText(0);
+				_MultiLineTextBoxLogger->moveCursorToPosition(0);
+				_MultiLineTextBoxLogger->appendText("Failed booting NDS/TWL Binary \n ");
+				_MultiLineTextBoxLogger->appendText(currentFileChosen);
+				_MultiLineTextBoxLogger->appendText("\n");
+				waitForAOrTouchScreenButtonMessage(_MultiLineTextBoxLogger, "Press (A) or tap touchscreen to continue. \n");
+				_MultiLineTextBoxLogger->invalidateVisibleRectCache();
+				_fileScreen->eraseGadget(_MultiLineTextBoxLogger);
+				_MultiLineTextBoxLogger->destroy();
+			}
+			*/
+
 			if(__dsimode == false){
 				shutdownNDSHardware();
 			}
